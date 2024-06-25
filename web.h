@@ -23,14 +23,17 @@ const char htmlHomePage[] PROGMEM = R"HTMLHOMEPAGE(
             /* Màu nền cho trang */
             letter-spacing: 1px;
         }
+
         .home {
             display: flex;
-            justify-content: center;       
+            justify-content: center;
             font-size: 100px;
         }
+
         .des {
             font-size: 60px;
         }
+
         .menu {
             display: block;
             text-align: center;
@@ -72,9 +75,12 @@ const char htmlHomePage[] PROGMEM = R"HTMLHOMEPAGE(
             text-align: left;
             display: flex;
             flex-direction: column;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Đổ bóng */
-            transition: box-shadow 0.3s ease; /* Hiệu ứng chuyển đổi khi hover */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            /* Đổ bóng */
+            transition: box-shadow 0.3s ease;
+            /* Hiệu ứng chuyển đổi khi hover */
         }
+
         .right:hover {
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.7);
         }
@@ -98,7 +104,7 @@ const char htmlHomePage[] PROGMEM = R"HTMLHOMEPAGE(
             max-height: 250px;
             min-height: 250px;
             overflow-y: auto;
-            border: 1px solid #3498db;
+            border: 3px solid #F19ED2;
             padding: 10px;
             text-align: left;
             font-size: small;
@@ -196,7 +202,8 @@ const char htmlHomePage[] PROGMEM = R"HTMLHOMEPAGE(
             right: 0;
             height: 100%;
             width: 5px;
-            background-color: white; /* Màu sắc của đường kẻ */
+            background-color: white;
+            /* Màu sắc của đường kẻ */
         }
 
         .header-menu li {
@@ -204,8 +211,9 @@ const char htmlHomePage[] PROGMEM = R"HTMLHOMEPAGE(
         }
 
         .read-body {
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Đổ bóng */
-            transition: box-shadow 0.3s ease; 
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            /* Đổ bóng */
+            transition: box-shadow 0.3s ease;
             border-radius: 8px;
             width: 520px;
             background-color: #fff;
@@ -222,6 +230,7 @@ const char htmlHomePage[] PROGMEM = R"HTMLHOMEPAGE(
             display: flex;
             flex-direction: column;
         }
+
         .form-out label {
             display: block;
             font-weight: 100;
@@ -232,11 +241,13 @@ const char htmlHomePage[] PROGMEM = R"HTMLHOMEPAGE(
             text-align: center;
             margin-bottom: 15px;
         }
+
         .title-read h3 {
             font-weight: bold;
             font-size: 25px;
             padding-top: 20px;
         }
+
         /* .nav-tabs>li.active>a, .nav-tabs>li.active>a:focus {
             border-radius: 10px;
             color: #000;
@@ -248,7 +259,6 @@ const char htmlHomePage[] PROGMEM = R"HTMLHOMEPAGE(
         .nav-tabs>li.active>a:hover {
 
         } */
-
     </style>
 </head>
 
@@ -340,10 +350,58 @@ const char htmlHomePage[] PROGMEM = R"HTMLHOMEPAGE(
                                 <label for="read_license_plate">License</label>
                                 <input type="text" id="read_license_plate" class="form-control" />
                             </div>
-
                         </div>
                     </div>
+                </div>
+                <style>
+                    .confirmation {
+                        display: none;
+                        position: fixed;
+                        width: 480px;
+                        padding: 20px 30px;
+                        top: 30%;
+                        left: 50%;
+                        transform: translate(-50%);
+                        background-color: #fff;
+                        border: 1px solid #000;
+                        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+                        border-radius: 5px;
+                        transition: all 0.5s;
+                        z-index: 100;
+                    }
 
+                    .confirmation .action {
+                        display: flex;
+                        align-items: center;
+                        gap: 10px;
+                    }
+
+                    #blur-bg {
+                        display: none;
+                        position: fixed;
+                        top: 0;
+                        left: 0;
+                        width: 100vw;
+                        height: 100vh;
+                        background: #fff;
+                        opacity: .7;
+                        z-index: 99;
+                    }
+
+                    #checkError {
+                        display: none;
+                    }
+                </style>
+                <div id="blur-bg"></div>
+                <div id="confirmation-popup" class="confirmation">
+                    <div class="pb-3 form-out">
+                        <label for="input_uid">Vui lòng nhập UID:</label>
+                        <input type="password" id="input_uid" class="form-control" />
+                    </div>
+                    <div class="action">
+                        <button id="checkUidBtn" class="btn btn-primary">Xác nhận</button>
+                        <label id="checkError" class="text-danger">*UID không chính xác</label>
+                    </div>
                 </div>
             </div>
         </div>
@@ -358,15 +416,15 @@ const char htmlHomePage[] PROGMEM = R"HTMLHOMEPAGE(
             const _time = `${currentDate.getHours()}:${currentDate.getMinutes()}:${currentDate.getSeconds()} ${currentDate.toDateString()}`;
             let _status;
             if (show_status) {
-                _status = (status["err_code"] == 0) ? `<span style="color:green">SUCCESS</span>` : `<span style="color:red">FAILD: ${status["msg"]}</span>`;
+                _status = (status["err_code"] == 0) ? `<span style="color:#91DDCF">GHI THÀNH CÔNG</span>` : `<span style="color:red">GHI THẤT BẠI: ${status["msg"]}</span>`;
             }
             let msg = `<div><b>${_time}</b><br>`;
             $('#read_time').val(_time);
             msg += content;
             if (!show_status) {
-                msg += `<br>---<br>`;
+                msg += `<br>-------------------------<br>`;
             } else {
-                msg += `<br>Status: ${_status}<br>---<br>`;
+                msg += `<br>Trạng thái: ${_status}<br>-------------------------<br>`;
             }
             msg += "</div>";
             view_area.innerHTML += msg;
@@ -398,6 +456,70 @@ const char htmlHomePage[] PROGMEM = R"HTMLHOMEPAGE(
             ws.send(JSON.stringify(msg));
         }
 
+        let uid = '';
+        let time = '';
+        let card_name = '';
+        let card_cccd = '';
+        let card_license_plate = '';
+
+        $('#read-sim').click(function () {
+            const jsonString = '{"type":"card_info","card_uid":"12 34 56 78","name":"Nguyen Van A","cccd":"012345678901","license_plate":"29A-12345"}';
+            const obj = JSON.parse(jsonString);
+            //console.log(obj);
+            uid = obj.card_uid;
+            card_name = obj.name;
+            card_cccd = obj.cccd;
+            license_plate = obj.license_plate;
+            time = 'time';
+            $('#blur-bg').css('display', 'block');
+            $('#confirmation-popup').css('display', 'block');
+        });
+
+        function checkShowInfo(inputId, uid) {
+            function normalizeString(str) {
+                return str.toLowerCase().replace(/\s+/g, '');
+            }
+
+            const normalizedInputId = normalizeString(inputId);
+            const normalizedUid = normalizeString(uid);
+
+            return normalizedInputId === normalizedUid;
+        }
+
+        $('#checkUidBtn').click(function () {
+            $("#checkError").css('display', 'none')
+            const inputId = $('#input_uid').val();
+            if (checkShowInfo(inputId, uid)) {
+                console.log("Chuỗi phù hợp!");
+                handleShowInfo(card_name, card_cccd, card_license_plate, time);
+                clearPopup();
+            } else {
+                console.log("Chuỗi không phù hợp!");
+                $("#checkError").css('display', 'flex')
+            }
+        });
+
+        function clearPopup(){
+            uid = '';
+            card_name = '';
+            card_cccd = '';
+            license_plate = '';
+            time = '';
+            $("#checkError").css('display', 'none')
+            $('#blur-bg').css('display', 'none');
+            $('#confirmation-popup').css('display', 'none');
+        }
+
+        $("#blur-bg").click(function () {
+            clearPopup();
+        });
+
+        function handleShowInfo(currentName, currentCardID, currentLicense, time) {
+            $('#read_name').val(currentName);
+            $('#read_cccd').val(currentCardID);
+            $('#read_license_plate').val(currentLicense);
+            $('#read_time').val(time);
+        }
         document.addEventListener("DOMContentLoaded", function () {
             if ("WebSocket" in window) {
                 ws = new WebSocket('ws://' + window.location.host + ':81/');
@@ -407,21 +529,28 @@ const char htmlHomePage[] PROGMEM = R"HTMLHOMEPAGE(
                     const type = evt.data;
                     if (typeof type === 'string') {
                         const json = JSON.parse(evt.data);
-                        console.log("Data Read:" + JSON.stringify(json));
+                        //console.log("Data Read:" + JSON.stringify(json));
                         const type = json["type"];
                         if (type == "card_info") {
                             const { card_uid, name, cccd, license_plate } = json;
                             const content = `<b>Read Card</b><br>Card UID: ${card_uid}<br>Name: ${name}<br>License: ${license_plate}<br>CCCD: ${cccd}`;
-                            $('#read_name').val(name);
-                            $('#read_cccd').val(cccd);
-                            $('#read_license_plate').val(license_plate);
+                            //$('#read_name').val(name);
+                            //$('#read_cccd').val(cccd);
+                            //$('#read_license_plate').val(license_plate);
                             const currentDate = new Date();
                             const _time = `${currentDate.getHours()}:${currentDate.getMinutes()}:${currentDate.getSeconds()} ${currentDate.toDateString()}`;
-                            $('#read_time').val(_time);
+                            uid = card_uid;
+                            card_name = name;
+                            card_cccd = cccd;
+                            card_license_plate = license_plate;
+                            time = _time;
+                            $('#blur-bg').css('display', 'block');
+                            $('#confirmation-popup').css('display', 'block');
+                            //$('#read_time').val(_time);
                             // showArea(content, {}, false);
                         } else if (type == "add_status") {
                             const { error, reason } = json;
-                            const content = `<b>Add Card</b><br>Name: ${name}<br>License: ${license}<br>CCCD: ${cccd}<br>Key: ${authenticationKey}`;
+                            const content = `<b>Thêm thẻ</b><br>Tên: ${name}<br>License: ${license}<br>CCCD: ${cccd}<br>Key: ${authenticationKey}`;
                             showArea(content, { "err_code": error, "msg": reason });
                         } else if (type == "other") {
                             showArea("<br>Đưa thẻ cần ghi, lại gần cảm biến<br>", {}, false);
